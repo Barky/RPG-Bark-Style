@@ -9,8 +9,9 @@ namespace Combat
     {
 
          Transform target;
-        [SerializeField] private float attackRange = 2f;
-        [SerializeField] private float timeBetweenAttacks = 1f;
+        [SerializeField]  float attackRange = 2f;
+        [SerializeField]  float timeBetweenAttacks = 1f;
+        [SerializeField]  float weaponDamage = 10f;
 
         private float timeSinceLastAttack = 0f;
         private void Update()
@@ -34,11 +35,19 @@ namespace Combat
         {
             if(timeSinceLastAttack> timeBetweenAttacks)
             {
+                // triggers the hit animation event
                 GetComponent<Animator>().SetTrigger("attack");
                 timeSinceLastAttack = 0f;
+                
+
             }
         }
-
+        // animation event
+        void Hit()
+        {
+            Health healthComponent = target.GetComponent<Health>();
+            healthComponent.TakeDamage(weaponDamage);
+        }
         private bool GetIsInRange()
         {
             return Vector3.Distance(transform.position, target.position) < attackRange;
@@ -50,11 +59,7 @@ namespace Combat
             target = combatTarget.transform;
         }
 
-        // animation event
-        void Hit()
-        {
-            
-        }
+
 
         public void Cancel()
         {
