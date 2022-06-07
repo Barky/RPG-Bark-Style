@@ -10,11 +10,12 @@ namespace Combat
 
          Transform target;
         [SerializeField] private float attackRange = 2f;
-        
+        [SerializeField] private float timeBetweenAttacks = 1f;
 
+        private float timeSinceLastAttack = 0f;
         private void Update()
         {
-
+            timeSinceLastAttack += Time.deltaTime;
             if (target == null) return;
             
             if (!GetIsInRange())
@@ -25,6 +26,16 @@ namespace Combat
             else
             {
                 GetComponent<PlayerMover>().Cancel();
+                AttackBehaviour();
+            }
+        }
+
+        private void AttackBehaviour()
+        {
+            if(timeSinceLastAttack> timeBetweenAttacks)
+            {
+                GetComponent<Animator>().SetTrigger("attack");
+                timeSinceLastAttack = 0f;
             }
         }
 
@@ -37,6 +48,12 @@ namespace Combat
         {
             GetComponent<ActionScheduler>().StartAction(this);
             target = combatTarget.transform;
+        }
+
+        // animation event
+        void Hit()
+        {
+            
         }
 
         public void Cancel()
