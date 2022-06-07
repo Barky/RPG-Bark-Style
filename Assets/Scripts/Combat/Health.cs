@@ -5,12 +5,31 @@ namespace Combat
     public class Health : MonoBehaviour
     {
 
-        [SerializeField]  float health = 100f;
+        [SerializeField]  float healthPoints = 100f;
 
+        private bool isDead = false;
+
+        public bool IsDead()
+        {
+            return isDead;
+        }
         public void TakeDamage(float damage)
         {
-            health = Mathf.Max((health - damage), 0);
-            Debug.Log("enemy health = " +health);
+            healthPoints = Mathf.Max((healthPoints - damage), 0);
+            Debug.Log("enemy health = " +healthPoints);
+
+            if (healthPoints == 0)
+            {
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            if (isDead) return;
+            
+            isDead = true;
+            GetComponent<Animator>().SetTrigger("die");
         }
     }
 }
