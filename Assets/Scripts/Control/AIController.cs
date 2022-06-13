@@ -9,14 +9,28 @@ namespace Control
 {
     public class AIController : MonoBehaviour
     {
+        
 
         [SerializeField] private float chaseDistance = 5f;
+        [SerializeField] private float suspicionTime = 3f;
+        [SerializeField] private float waypointTolerance = 1f;
+        [SerializeField] private float waypointDwellTime = 3f;
+
+
         private Fighter fighter;
         private GameObject player;
         private Health health;
         private PlayerMover mover;
+
+        [SerializeField] private PatrolPath patrolpath;
         
         private Vector3 guardingPosition;
+
+        private int currentWaypointIndex = 0;
+
+        private float timeSinceLastPlayerSaw = Mathf.Infinity;
+        private float timeSinceArrivedWaypoint = Mathf.Infinity;
+
         private void Start()
         {
             fighter = GetComponent<Fighter>();
@@ -40,13 +54,72 @@ namespace Control
             
             if (InAttackRange() && fighter.CanAttack(player))
             {
-                fighter.Attack(player);
-
+                AttackBehaviour();
             }
+            else if(timeSinceLastPlayerSaw < suspicionTime)
+
+            {
+                SuspicionBehaviour();
+            }
+            
             else
             {
-                mover.StartMoveAction(guardingPosition);
+                PatrolBehaviour();
             }
+
+            UpdateTimers();
+        }
+
+        private void UpdateTimers()
+        {
+            timeSinceLastPlayerSaw += Time.deltaTime;
+            timeSinceArrivedWaypoint += Time.deltaTime;
+        }
+
+        private void PatrolBehaviour()
+        {
+            Vector3 NextPosition = guardingPosition;
+
+            if (patrolpath != null)
+            {
+                if (AtWaypoint())
+                {
+                    timeSinceArrivedWaypoint = 0f;
+                    CycleWaypoint();
+                }
+                NextPosition = GetCurrentWaypoint();
+            }
+            if(timeSinceArrivedWaypoint >  waypointDwellTime)
+            {
+                mover.StartMoveAction(NextPosition);
+            }
+        }
+
+
+        private bool AtWaypoint()
+        {
+            float distanceToWaypoint = Vector3.Distance(transform.position, GetCurrentWaypoint());
+            return distanceToWaypoint < waypointTolerance;
+        }
+
+        private void CycleWaypoint()
+        {
+            currentWaypointIndex = patrolpath.GetNextIndex(currentWaypointIndex);
+        }
+        private Vector3 GetCurrentWaypoint()
+        {
+            return patrolpath.GetWayPoint(currentWaypointIndex);
+        }
+
+        private void SuspicionBehaviour()
+        {
+            GetComponent<ActionScheduler>().CancelCurrentAction();
+        }
+
+        private void AttackBehaviour()
+        {
+            timeSinceLastPlayerSaw = 0;
+            fighter.Attack(player);
         }
 
         private bool InAttackRange()
