@@ -13,10 +13,10 @@ namespace Combat
         [SerializeField]  float timeBetweenAttacks = 1f;
         [SerializeField]  float weaponDamage = 10f;
 
-        private float timeSinceLastAttack = 0f;
+        private float timeSinceLastAttack = Mathf.Infinity;
         private void Update()
         {
-            timeSinceLastAttack += Time.deltaTime;
+            timeSinceLastAttack += Time.deltaTime; 
             if (target == null) return;
             if (target.IsDead()) return;
             if (!GetIsInRange())
@@ -55,7 +55,7 @@ namespace Combat
             return Vector3.Distance(transform.position, target.transform.position) < attackRange;
         }
 
-        public bool CanAttack(CombatTarget combatTarget)
+        public bool CanAttack(GameObject combatTarget)
         {
 
             if (combatTarget == null)
@@ -67,7 +67,7 @@ namespace Combat
             return targetToTest != null && !targetToTest.IsDead();
         }
 
-        public void Attack(CombatTarget combatTarget)
+        public void Attack(GameObject combatTarget)
         {
             GetComponent<ActionScheduler>().StartAction(this);
             target = combatTarget.GetComponent<Health>();

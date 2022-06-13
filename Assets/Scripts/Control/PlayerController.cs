@@ -1,4 +1,6 @@
+using System;
 using Combat;
+using Core;
 using Movement;
 using UnityEngine;
 
@@ -6,8 +8,17 @@ namespace Control
 {
     public class PlayerController : MonoBehaviour
     {
+        private Health health;
+
+        private void Start()
+        {
+            health = GetComponent<Health>();
+        }
+
         private void Update()
         {
+            if (health.IsDead()) return;
+
             if (InteractWithCombat()) return;
             if (InteractWithMovement()) return;
         }
@@ -19,11 +30,14 @@ namespace Control
             foreach (RaycastHit hit in hits)
             {
                 CombatTarget target = hit.transform.GetComponent<CombatTarget>();
-                if (!GetComponent<Fighter>().CanAttack(target)) continue;
-
+                
+                if (target == null) continue;
+                
+                if (GetComponent<Fighter>().CanAttack(target.gameObject)) continue;
+                
                 if (Input.GetMouseButtonDown(0))
                 {
-                    GetComponent<Fighter>().Attack(target);
+                    GetComponent<Fighter>().Attack(target.gameObject);
                 }
 
                 return true;

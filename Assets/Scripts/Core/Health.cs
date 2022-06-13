@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Combat
+namespace Core
 {
     public class Health : MonoBehaviour
     {
@@ -30,6 +30,7 @@ namespace Combat
             
             isDead = true;
             GetComponent<Animator>().SetTrigger("die");
+            GetComponent<ActionScheduler>().CancelCurrentAction();
         }
     }
 }
