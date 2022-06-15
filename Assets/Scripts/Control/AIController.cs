@@ -15,6 +15,8 @@ namespace Control
         [SerializeField] private float suspicionTime = 3f;
         [SerializeField] private float waypointTolerance = 1f;
         [SerializeField] private float waypointDwellTime = 3f;
+        
+        [Range(0,1)] [SerializeField] private float patrolSpeedFraction = 0.2f;
 
 
         private Fighter fighter;
@@ -91,7 +93,7 @@ namespace Control
             }
             if(timeSinceArrivedWaypoint >  waypointDwellTime)
             {
-                mover.StartMoveAction(NextPosition);
+                mover.StartMoveAction(NextPosition, patrolSpeedFraction);
             }
         }
 

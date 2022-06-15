@@ -1,3 +1,4 @@
+using System;
 using Combat;
 using Core;
 using UnityEngine;
@@ -14,6 +15,8 @@ namespace Movement
         [SerializeField] private Transform target_;
         private Ray lastRay;
 
+        [SerializeField] private float maximumSpeed = 6f;
+
         private void Start()
         {
             nav = GetComponent<NavMeshAgent>();
@@ -26,9 +29,10 @@ namespace Movement
             nav.enabled = !health.IsDead();
             UpdateAnimator();
         }
-        public void MoveTo(Vector3 destination)
+        public void MoveTo(Vector3 destination, float speedFraction)
         {
             nav.destination = destination;
+            nav.speed = maximumSpeed * Mathf.Clamp01(speedFraction);
             nav.isStopped = false;
 
         }
@@ -37,14 +41,12 @@ namespace Movement
             nav.isStopped = true;
         }
 
-        public void StartMoveAction(Vector3 destination)
+        public void StartMoveAction(Vector3 destination, float speedFraction)
         {
             
             GetComponent<ActionScheduler>().StartAction(this);
-
-            // GetComponent<Fighter>().Cancel();
             
-            MoveTo(destination);
+            MoveTo(destination, speedFraction);
         }
 
         void UpdateAnimator()

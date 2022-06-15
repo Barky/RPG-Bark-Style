@@ -21,7 +21,7 @@ namespace Combat
             if (target.IsDead()) return;
             if (!GetIsInRange())
             {
-                GetComponent<PlayerMover>().MoveTo(target.transform.position);
+                GetComponent<PlayerMover>().MoveTo(target.transform.position, 1f);
             }
 
             else

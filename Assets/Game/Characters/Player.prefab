@@ -71,6 +71,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5545178077847857559, guid: f499013f2b7151d4eacaae6f005c4a74, type: 3}
+      propertyPath: attackRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5545178077847857559, guid: f499013f2b7151d4eacaae6f005c4a74, type: 3}
+      propertyPath: timeBetweenAttacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6714978845095867470, guid: f499013f2b7151d4eacaae6f005c4a74, type: 3}
+      propertyPath: healthPoints
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f499013f2b7151d4eacaae6f005c4a74, type: 3}
 --- !u!1 &5082493287450394273 stripped

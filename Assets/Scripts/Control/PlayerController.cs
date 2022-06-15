@@ -56,7 +56,7 @@ namespace Control
             {
                 if (Input.GetMouseButton(0))
                 {
-                    GetComponent<PlayerMover>().StartMoveAction(hit.point);
+                    GetComponent<PlayerMover>().StartMoveAction(hit.point, 1f);
                 }
 
                 return true;
