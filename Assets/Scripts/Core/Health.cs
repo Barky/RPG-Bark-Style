@@ -7,7 +7,7 @@ namespace Core
 
         [SerializeField]  float healthPoints = 100f;
 
-        private bool isDead = false;
+        [SerializeField] private bool isDead = false;
 
         public bool IsDead()
         {
@@ -16,7 +16,7 @@ namespace Core
         public void TakeDamage(float damage)
         {
             healthPoints = Mathf.Max((healthPoints - damage), 0);
-            Debug.Log("enemy health = " +healthPoints);
+            Debug.Log(transform.tag + " health = " +healthPoints);
 
             if (healthPoints == 0)
             {
@@ -33,4 +33,5 @@ namespace Core
             GetComponent<ActionScheduler>().CancelCurrentAction();
         }
     }
+    
 }
